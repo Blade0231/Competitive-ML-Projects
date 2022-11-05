@@ -1,2 +1,5 @@
 *.csv
+*.xlsx
+.ipynb_checkpoints/
+data/
 example_readme.md
