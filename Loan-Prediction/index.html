@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>API List</title>
+  </head>
+  <body>
+    <h1>API List</h1>
+    <div id="list">
+      <!-- The list of items will be inserted here -->
+    </div>
+    <form id="form">
+      <button type="submit">Submit</button>
+    </form>
+    <div id="message">
+      <!-- A message will be inserted here -->
+    </div>
+    <script>
+      // Make a request to the API to retrieve the list of items
+      axios.get('http://example.com/api/items')
+        .then(function (response) {
+          // Parse the data and store it in a variable
+          var items = response.data;
+          
+          // Get the list element
+          var list = document.getElementById('list');
+          
+          // Loop through the list of items and create an HTML element for each one
+          for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var element = document.createElement('div');
+            element.innerHTML = item;
+            
+            // Add an event listener to the element that allows the user to select it
+            element.addEventListener('click', function() {
+              this.classList.toggle('selected');
+            });
+            
+            // Append the element to the list
+            list.appendChild(element);
+          }
+        });
+      
+      // Add an event listener to the form that handles the submission
+      var form = document.getElementById('form');
+      form.addEventListener('submit', function(event) {
+        // Prevent the default submission behavior
+        event.preventDefault();
+        
+        // Get the selected item
+        var selected = document.querySelector('.selected');
+        
+        // Send the selected item back to the API using another request
+        axios.post('http://example.com/api/submit', { item: selected.innerHTML })
+          .then(function (response) {
+            // Handle the response from the API and display a message to the user
+            var message = document.getElementById('message');
+            if (response.data.success) {
+              message.innerHTML = 'The submission was successful!';
+            } else {
+              message.innerHTML = 'The submission failed. Please try again.';
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
